@@ -83,4 +83,10 @@
         android:summary="@string/brightness_icon_summary"
         android:dependency="qs_show_brightness"
         android:defaultValue="true"/>
+
+    <com.nitroge.settings.preferences.SystemSettingSwitchPreference
+            android:key="qs_panel_bg_use_new_tint"
+            android:title="@string/qs_bg_use_new_tint"
+            android:summary="@string/qs_bg_use_new_tint_summary"
+            android:defaultValue="true" />
 </PreferenceScreen>
