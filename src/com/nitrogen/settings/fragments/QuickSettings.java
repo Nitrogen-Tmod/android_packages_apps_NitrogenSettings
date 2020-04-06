@@ -23,7 +23,6 @@ import com.android.settings.SettingsPreferenceFragment;
 import java.util.Locale;
 import android.text.TextUtils;
 import android.view.View;
-
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,6 +37,7 @@ public class QuickSettings extends SettingsPreferenceFragment implements
     private ListPreference mHeaderProvider;
     private String mDaylightHeaderProvider;
     private SwitchPreference mHeaderEnabled;
+    private CustomSeekBarPreference mQsPanelAlpha;
 
     private static final String CUSTOM_HEADER_BROWSE = "custom_header_browse";
     private static final String CUSTOM_HEADER_IMAGE = "status_bar_custom_header";
@@ -46,6 +46,7 @@ public class QuickSettings extends SettingsPreferenceFragment implements
     private static final String CUSTOM_HEADER_PROVIDER = "custom_header_provider";
     private static final String STATUS_BAR_CUSTOM_HEADER = "status_bar_custom_header";
     private static final String CUSTOM_HEADER_ENABLED = "status_bar_custom_header";
+    private static final String KEY_QS_PANEL_ALPHA = "qs_panel_alpha";
 
     @Override
     public void onCreate(Bundle icicle) {
@@ -108,11 +109,27 @@ public class QuickSettings extends SettingsPreferenceFragment implements
                 mDaylightHeaderPack.setSummary(mDaylightHeaderPack.getEntry());
             }
         }
+        PreferenceScreen prefScreen = getPreferenceScreen();
+        ContentResolver resolver = getActivity().getContentResolver();
+
+      mQsPanelAlpha = (CustomSeekBarPreference) findPreference(KEY_QS_PANEL_ALPHA);
+        int qsPanelAlpha = Settings.System.getInt(getContentResolver(),
+                Settings.System.QS_PANEL_BG_ALPHA, 221);
+        mQsPanelAlpha.setValue((int)(((double) qsPanelAlpha / 255) * 100));
+        mQsPanelAlpha.setOnPreferenceChangeListener(this);
      }
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
        ContentResolver resolver = getActivity().getContentResolver();
+        if (preference == mQsPanelAlpha) {
+            int bgAlpha = (Integer) newValue;
+            int trueValue = (int) (((double) bgAlpha / 100) * 255);
+            Settings.System.putInt(getContentResolver(),
+                    Settings.System.QS_PANEL_BG_ALPHA, trueValue);
+            return true;
+        }
+
         switch (preference.getKey()) {
         case DAYLIGHT_HEADER_PACK:
                 String dhvalue = (String) newValue;
@@ -146,8 +163,7 @@ public class QuickSettings extends SettingsPreferenceFragment implements
                 return true;
 
             default:
-
-        return false;
+                return false;
        }
     }
 
