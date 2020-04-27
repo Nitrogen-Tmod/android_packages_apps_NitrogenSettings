@@ -240,4 +240,8 @@
     <string name="status_bar_battery_style_circle">Circle</string>
     <string name="status_bar_battery_style_dotted_circle">Dotted сircle</string>
     <string name="status_bar_battery_style_text">Text</string>
+
+    <!-- Allow fake signature checkbox in developer settings -->
+    <string name="allow_signature_fake">Allow signature spoofing</string>
+    <string name="allow_signature_fake_summary">Allow apps to bypass security systems by pretending to be a different app</string>
 </resources>
